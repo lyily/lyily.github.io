@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>同类基金竞品分析器 — 陆嵩元</title>
+<meta name="description" content="输入一只基金代码，自动产出竞品对比表与定位分析报告。一条命令端到端完成。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css?v=1781679722">
+</head>
+<body>
+<div class="page">
+<header class="masthead">
+  <a class="brand" href="/" >陆嵩元</a>
+  <nav>
+    <a href="/works/fund-tool/" aria-current="page">作品</a>
+    <a href="/about/" >关于</a>
+    <a href="/contact/" >联系</a>
+  </nav>
+  <span class="mono">LU SONGYUAN · MMXXVI</span>
+</header>
+
+
+<section class="detail-hero reveal">
+  <div class="issue-no">FIRST ISSUE · 2026</div>
+  <h1>同类基金竞品分析器</h1>
+  <p class="d-slogan">一条命令出竞品分析报告</p>
+</section>
+
+<div class="tldr reveal">
+  <span class="tl-label">TL;DR</span>
+  <p>输入一只基金代码，工具自动选 8 只同类竞品、抓取业绩与风险指标、横向比较，再调用大模型生成一份带定位分析的 Markdown 报告与 Excel 对比表。原本半天的活，现在三五分钟。</p>
+</div>
+
+<section class="detail-sec reveal">
+  <div class="ds-label">痛点 · PROBLEM</div>
+  <p>做产品对接渠道、写一页通、判断新基金定位时，第一步永远是<b>同类竞品分析</b>——要查 8 到 10 只同类型基金的费率、规模、近一/三年业绩、最大回撤、夏普比率等指标。</p>
+  <p>在传统流程里，这意味着：打开 Wind 或同花顺，一只一只搜，复制粘贴到 Excel，手动算对比项，再写一段定位分析。一只基金做下来<b>半天</b>，做完才发现要再加几只竞品，又得重来。</p>
+  <p>更要命的是，下次再分析另一只基金，整个流程几乎要重复一遍——价值含量低，但占用大量时间。</p>
+</section>
+
+<section class="detail-sec reveal">
+  <div class="ds-label">怎么做的 · HOW IT WORKS</div>
+  <p>工具用 Python 写成，输入只要一个基金代码。流程分四步：① 用 akshare 接口拉取基金基础信息和同类清单，自动按类型+规模匹配 8 只竞品；② 抓取所有候选基金的业绩、风险、规模、费率数据；③ 生成 Excel 对比表，每列最优值高亮成绿色；④ 把对比表喂给大模型（默认 Kimi，可切 DeepSeek），让它写一段定位分析。</p>
+  <p>几个工程上比较得意的细节：<b>本地缓存</b>——同一只基金当天再跑只要几秒；<b>自动选竞品</b>——指数型按跟踪标的、主动型按类型+规模匹配；<b>「复核提醒」</b>——大模型分析里凡是出现表格外的数字，会自动打上 ⚠️ 标记，提醒人工核对，防止 AI 编数据。</p>
+  <div class="detail-term"><span class="ps">$ </span>python3 main.py --code 007994<br><span class="cmd-out">→ output/007994_20260612/report.md + comparison.xlsx（约 3 分钟）</span></div>
+</section>
+
+<section class="shot reveal">
+  <div class="ds-label" style="font-family:var(--sans);font-size:11.5px;letter-spacing:0.3em;color:var(--ink-faint);margin-bottom:20px;">真实输出 · OUTPUT</div>
+  <div class="shot-frame"><img src="/assets/shots/fund_tool_report.png" alt="report.md · 竞品对比表 + 大模型定位分析" loading="lazy"></div>
+  <div class="shot-cap">report.md · 竞品对比表 + 大模型定位分析</div>
+  <div class="shot-frame"><img src="/assets/shots/fund_tool_excel.png" alt="comparison.xlsx · 横向对比，绿色 = 该列最优" loading="lazy"></div>
+  <div class="shot-cap">comparison.xlsx · 横向对比，绿色 = 该列最优</div>
+</section>
+
+<section class="detail-sec reveal">
+  <div class="ds-label">成果 · OUTCOME</div>
+  <p>完成竞品分析从「半天手工」到「三分钟自动」的跨越，输出物从一张表升级为<b>对比表 + 定位分析报告</b>双件套。</p>
+  <p>已成为日常做新基金研究、写产品材料前的第一道工序。</p>
+</section>
+
+<div class="detail-foot reveal">
+  <div class="timeline">
+    <div class="ds-label">开发历程 · TIMELINE</div>
+    <div class="tl-step"><span class="tl-when">2026.05</span><span class="tl-what">立项：决定把竞品分析这件最痛的小事先做掉</span></div>
+    <div class="tl-step"><span class="tl-when">2026.05</span><span class="tl-what">akshare 数据接口探查，敲定可用字段</span></div>
+    <div class="tl-step"><span class="tl-when">2026.06</span><span class="tl-what">对比表 + 报告主流程跑通，加缓存与多 LLM 切换</span></div>
+    <div class="tl-step"><span class="tl-when">2026.06</span><span class="tl-what">加入「复核提醒」机制，对 LLM 编数字做防御</span></div>
+  </div>
+  <div class="tech-stack">
+    <div class="ds-label">技术栈 · STACK</div>
+    <div class="ts-tags"><span>Python</span><span>akshare 数据接口</span><span>大模型分析（Kimi / DeepSeek）</span><span>Markdown 报告</span><span>Excel 对比表</span><span>本地缓存</span></div>
+  </div>
+</div>
+
+<nav class="pager reveal">
+  <a class="prev disabled"></a>
+  <a class="next" href="/works/reg-daily/"><span class="pg-dir">下一篇 →</span><span class="pg-name">监管与新发市场监控日报</span></a>
+</nav>
+
+</div><!-- /.page -->
+<script src="/assets/scripts.js?v=1781679722"></script>
+</body>
+</html>
+

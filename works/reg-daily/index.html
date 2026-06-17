@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>监管与新发市场监控日报 — 陆嵩元</title>
+<meta name="description" content="工作日早八点自动抓取证监会、基金业协会与全市场新发基金，调用大模型生成日报并邮件推送。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css?v=1781679722">
+</head>
+<body>
+<div class="page">
+<header class="masthead">
+  <a class="brand" href="/" >陆嵩元</a>
+  <nav>
+    <a href="/works/fund-tool/" aria-current="page">作品</a>
+    <a href="/about/" >关于</a>
+    <a href="/contact/" >联系</a>
+  </nav>
+  <span class="mono">LU SONGYUAN · MMXXVI</span>
+</header>
+
+
+<section class="detail-hero reveal">
+  <div class="issue-no">SECOND ISSUE · 2026</div>
+  <h1>监管与新发市场监控日报</h1>
+  <p class="d-slogan">每日八点自动出监管日报</p>
+</section>
+
+<div class="tldr reveal">
+  <span class="tl-label">TL;DR</span>
+  <p>每个工作日早 8 点，自动抓取证监会、基金业协会的当日政策动态，以及全市场新发基金数据，调用大模型筛选并生成日报，约 40 秒送达邮箱。已稳定运行，做产品判断从「人工盯梢」变成「邮件就位」。</p>
+</div>
+
+<section class="detail-sec reveal">
+  <div class="ds-label">痛点 · PROBLEM</div>
+  <p><b>监管信息分散</b>是产品岗信息流的天然痛点：证监会、基金业协会的政策更新各自散落在多个官网栏目，新发基金市场又要去 Wind 或同花顺单独跑数据。要做到「不遗漏」，传统流程依赖经验抽查或定期手动巡检，结构上不够稳。</p>
+  <p>想要的是一个<b>系统化的信息底</b>——早上一打开邮箱，今天的监管要闻与新发市场就摆在那里，让产品判断的输入端从「靠盯」变成「邮件就位」。</p>
+</section>
+
+<section class="detail-sec reveal">
+  <div class="ds-label">怎么做的 · HOW IT WORKS</div>
+  <p>工具是一个 Python 后台作业，由 macOS launchd 在每个工作日早 8 点唤起。流程：① 多源爬虫并发抓证监会、基金业协会的当日栏目；② 用 akshare 抓全市场新发基金数据，按关注关键词过滤；③ 调用大模型对原始条目做相关性筛选与摘要；④ 渲染成 HTML 和 Markdown 日报；⑤ 通过 SMTP 推送到邮箱。</p>
+  <p>做得最较真的两个工程细节：<b>稳定性</b>——加了「等网络就绪（最多 3 分钟）+ akshare 接口重试」两道保护，应对 Mac 唤醒后 WiFi 还没连上的情况；邮件 SMTP 加超时和重试，应对 QQ/163 临时不响应；<b>合规友好</b>——只抓公开列表页的标题与链接、请求间隔 3-5 秒、不绕过任何反爬，单源失败就标「请手动查看」而不是隐藏。</p>
+  <div class="detail-term"><span class="ps">$ </span>python3 main.py<br><span class="cmd-out">→ output/daily_20260617.md + .html，邮件已发送（约 40 秒）</span></div>
+</section>
+
+<section class="shot reveal">
+  <div class="ds-label" style="font-family:var(--sans);font-size:11.5px;letter-spacing:0.3em;color:var(--ink-faint);margin-bottom:20px;">真实输出 · OUTPUT</div>
+  <div class="shot-frame"><img src="/assets/shots/reg_daily_email.png" alt="邮件内日报 · 监管动态 + 新发市场表格" loading="lazy"></div>
+  <div class="shot-cap">邮件内日报 · 监管动态 + 新发市场表格</div>
+</section>
+
+<section class="detail-sec reveal">
+  <div class="ds-label">成果 · OUTCOME</div>
+  <p>已稳定运行，每个工作日早 8:01 准时把日报推到邮箱，从「人工盯梢半小时」变成「邮件就位」。</p>
+  <p>确保监管要闻与新发基金市场动态不遗漏，产品判断的输入端从此自动化。</p>
+</section>
+
+<div class="detail-foot reveal">
+  <div class="timeline">
+    <div class="ds-label">开发历程 · TIMELINE</div>
+    <div class="tl-step"><span class="tl-when">2026.05</span><span class="tl-what">立项：让市场扫视前置到早餐前</span></div>
+    <div class="tl-step"><span class="tl-when">2026.05</span><span class="tl-what">多源爬虫主流程跑通</span></div>
+    <div class="tl-step"><span class="tl-when">2026.06</span><span class="tl-what">接入大模型做相关性筛选与摘要</span></div>
+    <div class="tl-step"><span class="tl-when">2026.06.12</span><span class="tl-what">launchd 定时部署 + 邮件推送上线，开始日常使用</span></div>
+  </div>
+  <div class="tech-stack">
+    <div class="ds-label">技术栈 · STACK</div>
+    <div class="ts-tags"><span>Python</span><span>多源爬虫</span><span>akshare</span><span>大模型摘要（Kimi / DeepSeek）</span><span>SMTP 邮件推送</span><span>macOS launchd 定时</span></div>
+  </div>
+</div>
+
+<nav class="pager reveal">
+  <a class="prev" href="/works/fund-tool/"><span class="pg-dir">← 上一篇</span><span class="pg-name">同类基金竞品分析器</span></a>
+  <a class="next" href="/works/pitch-tool/"><span class="pg-dir">下一篇 →</span><span class="pg-name">一页通与路演材料生成器</span></a>
+</nav>
+
+</div><!-- /.page -->
+<script src="/assets/scripts.js?v=1781679722"></script>
+</body>
+</html>
+

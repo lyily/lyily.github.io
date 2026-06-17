@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一页通与路演材料生成器 — 陆嵩元</title>
+<meta name="description" content="输入产品要素 YAML，一条命令生成一页通、路演 PPT、渠道 FAQ 与合规自检报告四件套。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css?v=1781679722">
+</head>
+<body>
+<div class="page">
+<header class="masthead">
+  <a class="brand" href="/" >陆嵩元</a>
+  <nav>
+    <a href="/works/fund-tool/" aria-current="page">作品</a>
+    <a href="/about/" >关于</a>
+    <a href="/contact/" >联系</a>
+  </nav>
+  <span class="mono">LU SONGYUAN · MMXXVI</span>
+</header>
+
+
+<section class="detail-hero reveal">
+  <div class="issue-no">THIRD ISSUE · 2026</div>
+  <h1>一页通与路演材料生成器</h1>
+  <p class="d-slogan">发行材料一键生成与合规拦截</p>
+</section>
+
+<div class="tldr reveal">
+  <span class="tl-label">TL;DR</span>
+  <p>输入一只新基金的产品要素 YAML，一条命令产出 A4 一页通 HTML、十二页路演 PPT 框架、渠道 FAQ 与合规自检报告四件套；内置红线词校验和风险提示文案逐字比对，不合规直接拦截。</p>
+</div>
+
+<section class="detail-sec reveal">
+  <div class="ds-label">痛点 · PROBLEM</div>
+  <p>每发行一只新基金，渠道部门要的标配是<b>一页通 + 路演 PPT + 渠道 FAQ</b>三件套，再加产品部自己要做的<b>合规自检</b>。每一份的版式、字段、合规话术都大同小异，但都要一字一字重做。</p>
+  <p>更要命的是合规——风险提示文案在 PPT、一页通、FAQ 里必须<b>逐字一致</b>，多一个字、少一个字都不行；行业还有一长串「红线词」（如「保本」「稳赚」「高收益」等）不能出现。人工核对一遍要一小时，错一个字就要返工。</p>
+  <p>想要一个东西，<b>录入产品要素表，机器把四件套全生成、合规自检全做完</b>，不合规直接拦截，让人只做判断、不做体力。</p>
+</section>
+
+<section class="detail-sec reveal">
+  <div class="ds-label">怎么做的 · HOW IT WORKS</div>
+  <p>工具是一个 Python 命令行程序。流程：① 读取 product.yaml 产品要素表；② 调用大模型生成亮点/策略/背景/FAQ 文案；③ 渲染 A4 一页通 HTML（浏览器 Cmd+P 直接存 PDF）；④ 生成十二页路演 PPT 框架，红字标【待补充】；⑤ 跑合规自检——红线词扫描 + 风险提示文案逐字比对，输出合规报告。</p>
+  <p>工程上做得比较细的几处：<b>模板与逻辑分离</b>，想改一页通版式只改 HTML 模板，不动 Python；<b>降级机制</b>，大模型调用失败（断网/key 失效）不让流程崩，自动改用占位稿；<b>合规拦截</b>，红线词命中则程序以失败状态退出，材料不可流出，强制改词重跑；<b>严格不上线真实产品</b>，使用手册顶部标了红字警示，测试一律虚构产品。</p>
+  <div class="detail-term"><span class="ps">$ </span>python3 main.py --input product.yaml<br><span class="cmd-out">→ output/产品代码_日期/ · 一页通.html + 路演框架.pptx + 渠道FAQ.md + compliance_report.md</span></div>
+</section>
+
+<section class="shot reveal">
+  <div class="ds-label" style="font-family:var(--sans);font-size:11.5px;letter-spacing:0.3em;color:var(--ink-faint);margin-bottom:20px;">真实输出 · OUTPUT</div>
+  <div class="shot-frame"><img src="/assets/shots/pitch_tool_onepager.png" alt="一页通.html · A4 版式，Cmd+P 直接出 PDF" loading="lazy"></div>
+  <div class="shot-cap">一页通.html · A4 版式，Cmd+P 直接出 PDF</div>
+  <div class="shot-frame"><img src="/assets/shots/pitch_tool_compliance.png" alt="compliance_report.md · 合规自检报告" loading="lazy"></div>
+  <div class="shot-cap">compliance_report.md · 合规自检报告</div>
+</section>
+
+<section class="detail-sec reveal">
+  <div class="ds-label">成果 · OUTCOME</div>
+  <p>渠道材料制作 + 合规检查从「半天人工」变成「几分钟自动」，并内置红线拦截把不合规挡在源头。</p>
+  <p>降低重复劳动，把发行准备的精力释放出来用于判断与协同。</p>
+</section>
+
+<div class="detail-foot reveal">
+  <div class="timeline">
+    <div class="ds-label">开发历程 · TIMELINE</div>
+    <div class="tl-step"><span class="tl-when">2026.05</span><span class="tl-what">立项：把发行材料制作整条流水线自动化</span></div>
+    <div class="tl-step"><span class="tl-when">2026.06</span><span class="tl-what">一页通 + PPT + FAQ 主流程跑通</span></div>
+    <div class="tl-step"><span class="tl-when">2026.06</span><span class="tl-what">合规自检模块完成：红线词库 + 风险提示逐字比对</span></div>
+    <div class="tl-step"><span class="tl-when">2026.06</span><span class="tl-what">降级机制：LLM 失败时自动改用占位稿，不让流程中断</span></div>
+  </div>
+  <div class="tech-stack">
+    <div class="ds-label">技术栈 · STACK</div>
+    <div class="ts-tags"><span>Python</span><span>YAML 要素输入</span><span>HTML / PPTX 模板</span><span>大模型文案（Kimi / DeepSeek）</span><span>红线词校验</span><span>合规自检</span></div>
+  </div>
+</div>
+
+<nav class="pager reveal">
+  <a class="prev" href="/works/reg-daily/"><span class="pg-dir">← 上一篇</span><span class="pg-name">监管与新发市场监控日报</span></a>
+  <a class="next disabled"></a>
+</nav>
+
+</div><!-- /.page -->
+<script src="/assets/scripts.js?v=1781679722"></script>
+</body>
+</html>
+
