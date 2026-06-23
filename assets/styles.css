@@ -18,6 +18,7 @@
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+section.chapter { scroll-margin-top: 80px; }
 body {
   background: var(--paper);
   color: var(--ink);
@@ -216,6 +217,27 @@ footer { padding: 80px 0 60px; position: relative; }
   .masthead .brand { margin-right: 6px; }
 }
 
+/* —— 首页 4 屏分屏（桌面，:has 限定只在 home 生效，详情页不受影响）—— */
+@media (min-width: 761px) {
+  html:has(.panels) { scroll-snap-type: y mandatory; }
+  .panel {
+    min-height: 100vh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    padding: 80px 0 40px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  .panel-inner { width: 100%; }
+  /* panel 内重置原章节容器的 padding/border —— 避免双重间距 */
+  .panel .hero { padding: 0; border-bottom: none; }
+  .panel .stats { margin-top: 40px; border-bottom: none; }
+  .panel .chapter-head { margin-bottom: 44px; }
+}
+
 /* ============================================================
    ↓↓↓ 多页站点新增样式 ↓↓↓
    ============================================================ */
@@ -261,21 +283,6 @@ footer { padding: 80px 0 60px; position: relative; }
 .work-card .wc-more .arrow { transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); display: inline-block; }
 .work-card:hover .wc-more { color: var(--seal); }
 .work-card:hover .wc-more .arrow { transform: translateX(6px); }
-
-/* —— 首页：引导去「关于」的横幅 —— */
-.lead-band { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 44px 0 6px; }
-.lead-band .lb-text { font-size: clamp(18px, 2.4vw, 24px); font-weight: 600; max-width: 22em; }
-.lead-band a.lb-link {
-  font-family: var(--mono); font-size: 13.5px; color: var(--ink); text-decoration: none;
-  letter-spacing: 0.06em; position: relative; white-space: nowrap;
-}
-.lead-band a.lb-link::after {
-  content: ""; position: absolute; left: 0; bottom: -3px; width: 100%; height: 1px;
-  background: var(--seal); transform: scaleX(0); transform-origin: left;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.lead-band a.lb-link:hover { color: var(--seal); }
-.lead-band a.lb-link:hover::after { transform: scaleX(1); }
 
 /* —— 作品详情页 —— */
 .detail-hero { padding: 64px 0 40px; border-bottom: 1px solid var(--hair-strong); }
@@ -361,4 +368,49 @@ a.contact-row:hover .cr-act { opacity: 1; }
   .detail-foot { grid-template-columns: 1fr; gap: 32px; }
   .contact-row { grid-template-columns: 1fr; gap: 4px; }
   .contact-row .cr-act { display: none; }
+}
+
+/* ============================================================
+   ↓↓↓ about 详情页新区段 ↓↓↓
+   ============================================================ */
+
+/* 通用 tag 云（独立样式，不依赖 .tech-stack 父级） */
+.ts-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+.ts-tags span { font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft); border: 1px solid var(--hair); padding: 4px 12px; letter-spacing: 0.04em; }
+.ts-tags.ts-soft span { font-family: var(--serif); font-size: 13.5px; letter-spacing: 0; padding: 6px 14px; color: var(--ink); }
+
+/* 代表产物 · 迷你卡 */
+.proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--hair); margin-top: 4px; }
+.proj-card { padding: 24px 22px; border-left: 1px solid var(--hair); display: flex; flex-direction: column; gap: 10px; }
+.proj-card:first-child { border-left: none; }
+.proj-card .pc-name { font-size: 16px; font-weight: 600; line-height: 1.5; }
+.proj-card .pc-type { font-family: var(--mono); font-size: 12px; color: var(--seal); letter-spacing: 0.06em; }
+.proj-card .pc-role { font-family: var(--sans); font-size: 12.5px; color: var(--ink-soft); }
+.proj-foot { font-size: 14.5px; color: var(--ink-soft); margin-top: 18px; max-width: none; }
+.proj-foot b { color: var(--seal); font-weight: 600; }
+
+/* 跨学科 · 3 段并列 */
+.cross-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--hair); margin-top: 4px; }
+.cross-row { padding: 28px 22px; border-left: 1px solid var(--hair); display: flex; flex-direction: column; gap: 10px; }
+.cross-row:first-child { border-left: none; }
+.cross-row .cr-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.cross-row .cr-no { font-family: var(--mono); font-size: 13px; color: var(--seal); letter-spacing: 0.12em; }
+.cross-row .cr-name { font-size: 19px; font-weight: 900; letter-spacing: 0.05em; }
+.cross-row .cr-from { font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); flex-basis: 100%; margin-top: 2px; }
+.cross-row .cr-blurb { font-size: 14px; color: var(--ink-soft); max-width: none; line-height: 1.85; }
+
+/* 三条信条 · 卡片化 */
+.creed-list { display: grid; gap: 0; border-top: 1px solid var(--hair); margin-top: 4px; }
+.creed { padding: 30px 0 30px; border-bottom: 1px solid var(--hair); }
+.creed:last-child { border-bottom: none; }
+.creed-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 14px; }
+.creed-head .creed-no { font-family: var(--mono); font-size: 14px; color: var(--seal); letter-spacing: 0.16em; }
+.creed-head .creed-name { font-size: 22px; font-weight: 900; letter-spacing: 0.05em; }
+.creed-lead { font-size: 16px; color: var(--ink); margin-bottom: 12px; max-width: 42em; }
+.creed-ev { font-size: 14.5px; color: var(--ink-soft); max-width: 42em; line-height: 1.85; }
+
+@media (max-width: 760px) {
+  .proj-grid, .cross-grid { grid-template-columns: 1fr; }
+  .proj-card, .cross-row { border-left: none; border-top: 1px solid var(--hair); }
+  .proj-card:first-child, .cross-row:first-child { border-top: none; }
 }
